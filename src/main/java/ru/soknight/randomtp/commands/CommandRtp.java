@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import ru.soknight.lib.argument.CommandArguments;
-import ru.soknight.lib.command.preset.standalone.PlayerOnlyCommand;
+import ru.soknight.lib.command.preset.standalone.PermissibleCommand;
 import ru.soknight.lib.configuration.Messages;
 import ru.soknight.lib.cooldown.preset.RichPlayersCooldownStorage;
 import ru.soknight.lib.format.DateFormatter;
@@ -22,7 +22,7 @@ import ru.soknight.lib.format.TimeUnit;
 import ru.soknight.randomtp.RandomTP;
 import ru.soknight.randomtp.configuration.Configuration;
 
-public class CommandRtp extends PlayerOnlyCommand {
+public class CommandRtp extends PermissibleCommand {
     
     private static final DateFormatter FORMATTER = new DateFormatter(" ");
 
@@ -38,7 +38,7 @@ public class CommandRtp extends PlayerOnlyCommand {
 	private final List<String> enabledWorlds;
 	
 	public CommandRtp(RandomTP plugin, Configuration config, Messages messages) {
-		super(null, "randomtp.command.rtp", messages);
+		super("rtp", "randomtp.command.rtp", messages);
 		
 		this.cooldownStorage = new RichPlayersCooldownStorage(config.getInt("teleport.cooldown"));
 		this.messages = messages;
@@ -72,9 +72,9 @@ public class CommandRtp extends PlayerOnlyCommand {
 			
 			// checks for online target
 			OfflinePlayer offline = Bukkit.getOfflinePlayer(name);
-			if(offline == null || offline != null && !offline.isOnline()) {
-				messages.sendFormatted(sender, "error.player-not-found", "%player%", name);
-				return;
+			if(!isPlayerOnline(name)) {
+			    messages.sendFormatted(sender, "error.player-not-found", "%player%", name);
+                return;
 			}
 			
 			target = offline.getPlayer();
@@ -91,7 +91,7 @@ public class CommandRtp extends PlayerOnlyCommand {
 		// self rtp execution
 		} else {
 			// checks for player instance
-			if(!(sender instanceof Player)) {
+		    if(!isPlayer(sender)) {
 				messages.getAndSend(sender, "error.only-for-players");
 				return;
 			}
@@ -159,26 +159,19 @@ public class CommandRtp extends PlayerOnlyCommand {
 			
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> target.teleport(destionation));
 				
-			if(isOther) {
+			if(isOther)
                 messages.sendFormatted(sender, "teleport.success.other",
                         "%player%", target.getName(),
                         "%x%", x,
                         "%y%", y,
                         "%z%", z
                 );
-                
-                if(config.getBoolean("teleport.view-teleport-message"))
-                    messages.sendFormatted(target, "teleport.success.self",
-                            "%x%", x,
-                            "%y%", y,
-                            "%z%", z
-                    );
-            } else
-                messages.sendFormatted(target, "teleport.success.self",
-                        "%x%", x,
-                        "%y%", y,
-                        "%z%", z
-                );
+			
+			messages.sendFormatted(target, "teleport.success.self",
+                    "%x%", x,
+                    "%y%", y,
+                    "%z%", z
+            );
 		});
 	}
 	
