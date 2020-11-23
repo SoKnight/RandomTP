@@ -1,0 +1,33 @@
+name: ${project.name}
+main: ru.soknight.randomtp.RandomTP
+author: SoKnight
+version: ${project.version}
+api-version: 1.16
+depend: [SKLibrary]
+description: ${project.description}
+
+commands:
+  rtp:
+    aliases: [randomtp, wild]
+    description: Teleport sender to random location
+    usage: /rtp [player]
+
+permissions:
+  # **************
+  # *  Commands  *
+  # **************
+  randomtp.command.rtp:
+    description: Allows to use rtp command
+    default: true
+
+  randomtp.command.rtp.other:
+    description: Allows to randomly teleport other player
+    default: op
+    children:
+      randomtp.command.rtp: true
+      
+  randomtp.command.rtp.bypass:
+    description: Allows to bypass rtp command cooldown
+    default: op
+    children:
+      randomtp.command.rtp: true
