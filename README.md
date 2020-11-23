@@ -7,8 +7,7 @@ Just another minecraft random teleport plugin.
 - Restriction by worlds;
 - Cooldown for command usage;
 - Teleport yourself or other player;
-- PEconomy support, custom cost for teleport;
-- Custom cost and cooldown for groups (LuckPerms);
+- Custom cooldowns for groups (LuckPerms);
 - Fully customizable messages.
 
 ### Installation
