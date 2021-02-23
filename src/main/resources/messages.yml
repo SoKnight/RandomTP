@@ -21,7 +21,8 @@ error:
   only-for-players: "&cТолько игрок может использовать данную команду."
   no-permission: "&cНедостаточно прав."
   player-not-found: "&cИгрок %player% не найден."
-# Teleport
+
+# Телепортация
 teleport:
   failed:
     other-perm: "&cНедостаточно прав для телепортации другого игрока."
